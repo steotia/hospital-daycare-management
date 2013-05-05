@@ -1,0 +1,139 @@
+/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+.box {
+position: relative;
+margin: 15px 0;
+padding: 39px 19px 14px;
+background-color: #fff;
+border: 1px solid #ddd;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 158px;
+}
+
+.box:after {
+position: absolute;
+top: -1px;
+left: -1px;
+padding: 3px 7px;
+font-size: 12px;
+font-weight: bold;
+background-color: #f5f5f5;
+border: 1px solid #ddd;
+color: #9da0a4;
+-webkit-border-radius: 4px 0 4px 0;
+-moz-border-radius: 4px 0 4px 0;
+border-radius: 4px 0 4px 0;
+}
+
+.box.performance {
+  text-align: left;
+}
+
+.box.current-time:after {
+content: "Current Time";
+}
+
+.box.completion_time:after {
+content: "Completion Time";
+}
+
+.box.performance:after {
+content: "Improvement suggestions";
+}
+
+.box.waiting:after {
+content: "Waiting patients";
+}
+
+.box.b1:after {
+content: "Bed 1";
+}
+
+.box.b2:after {
+content: "Bed 2";
+}
+
+.box.b3:after {
+content: "Bed 3";
+}
+
+.box.b4:after {
+content: "Bed 4";
+}
+
+.box.b5:after {
+content: "Bed 5";
+}
+
+.box.b6:after {
+content: "Bed 6";
+}
+
+.box.b7:after {
+content: "Bed 7";
+}
+
+.box.b8:after {
+content: "Bed 8";
+}
+
+.box.b9:after {
+content: "Bed 9";
+}
+
+.patient-treated-true {
+  display: none;
+}
+
+button.free-bed-0 {
+  display: none;
+}
+
+.alert-warning {
+  color: #c09853;
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
+.blink {
+  animation: blink 1s step-end infinite
+}
+
+@keyframes blink {
+  0% {color: #FCF8E3}
+  50% {color: #B94A48}
+}

@@ -1,0 +1,93 @@
+<p>
+    <button class="btn" ng-click='timer.start(1)'>></button>
+    <button class="btn" ng-click='timer.start(10)'>>></button>
+    <button class="btn" ng-click='timer.stop()'>||</button>
+</p>
+<p>
+	<form class="form-inline" ng-submit="registerPatient()">
+	    <input type="text" placeholder="Patient Number" ng-model="patientNumber">
+	    <input type="text" placeholder="Patient Name" ng-model="patientName">
+	    <select class="input-medium" ng-model="treatmentType">
+			<option value="A">A (1 hr)</option>
+			<option value="B">B (2 hr)</option>
+			<option value="C">C (3 hr)</option>
+		</select>
+		<button class="btn" type="submit">Register</button>
+	</form>
+	<button class="btn" ng-click="registerRandom(5)">Random 5</button>
+	<button class="btn" ng-click="registerRandom(10)">Random 10</button>
+</p>
+<p>
+	<div class="box current-time span2">
+	  <h1>{{timer.data.value}}</h1>
+	</div>
+	<div class="box completion_time span2 muted">
+	  <h1>04:30</h1>
+	</div>
+	<div class="box waiting span2 muted">
+	  <h1>{{waiting()}}</h1>
+	</div>
+	<div class="box performance span3 pull-right muted">
+	  <ol>
+	  	<li>
+	  		Reduce delays
+	  	</li>
+	  	<li>
+	  		Re-allocate beds
+	  	</li>
+	  <ol>
+	</div>
+</p>
+<div class="clearfix"></div>
+<ul class="unstyled">
+	<li ng-repeat="bed in beds">
+		<div class="box span2 b{{bed.number}} {{bed.alertStatus}}">
+			<div ng-hide="bed.state=='waiting to release'" class="progress">
+  				<div class="bar" style="width: {{bed.completion}}%"></div>
+			</div>
+			<div ng-show="bed.state=='waiting to release'" class="progress">
+  				<div class="bar bar-danger" style="width: {{bed.completion}}%"></div>
+			</div>
+			<div>{{bed.assignedPatient}}</div>
+			<h2 ng-hide="bed.state=='waiting to release'">{{bed.freeAt}}</h2>
+			<h2 ng-show="bed.state=='waiting to release'" class="text-error">{{bed.freeAt}}</h2>
+			<!--<button class="btn btn-mini btn-warning" ng-show="bed.request_check">Check</button>-->
+			<button class="btn btn-mini btn-danger" ng-show="(bed.state!='free')" ng-click="delayRelease(bed.number)">Delay</button>
+			<button class="btn btn-mini btn-danger" ng-show="(bed.state!='free')" ng-click="releaseBed(bed.number)">Release</button>
+			<button class="btn btn-mini btn-success disabled" ng-show="bed.state=='free'">Released</button>
+		</div>
+	</li>
+</ul>
+
+
+<div class="clearfix"></div>
+
+<p>
+<h2>Todo</h2>
+    <div>
+      <span>{{waiting()}} of {{patients.length}} remaining</span>
+      <ul class="unstyled">
+        <li ng-repeat="patient in patients">
+          {{patient.patientNumber}} - {{patient.patientName}} - {{patient.treatmentType}} - {{patient.registrationTime}}
+      	  <button class="btn" ng-show="(freeBeds()!=0)&&(patient.startedTreatmentAt==null)" ng-click="assignBed(patient.patientNumber,patient.treatmentType)">Assign Bed</button>
+        </li>
+      </ul>
+    </div>
+  </p>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Waiting</th>
+			<th>Number</th>
+			<th>Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="patient in patients">
+			<td class="{{patient.alertStatus}}">status</td>
+			<td>{{patient.patientNumber}}</td>
+			<td>{{patient.patientName}}</td>
+		</tr>
+	</tbody>
+</table>
