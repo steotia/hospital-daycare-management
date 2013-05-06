@@ -7,10 +7,21 @@
   <link rel="stylesheet" href="css/bootstrap.min.css"/>
 </head>
 <body>
-  <div class="container">
-    <div ng-view></div>
-    <div class="muted">Rajiv Gandhi Cancer Institute Day Care Bed Management App: v<span app-version></span></div>
+  <div id="wrap">
+    <div class="container">
+      <div ng-view></div>
+    </div>
+    <div id="push"></div>
   </div>
+      <div id="footer">
+        <div class="container">
+          <p class="muted credit">
+            <div class="muted">Hospital Day Care Bed Management App: v<span app-version></span>
+               
+            </div>
+          </p>
+        </div>
+      </div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>

@@ -137,3 +137,22 @@ button.free-bed-0 {
   0% {color: #FCF8E3}
   50% {color: #B94A48}
 }
+
+#wrap {
+min-height: 100%;
+height: auto !important;
+height: 100%;
+margin: 0 auto -60px;
+}
+#footer {
+background-color: #f5f5f5;
+}
+#push, #footer {
+height: 60px;
+}
+html, body {
+height: 100%;
+}
+.container .credit {
+margin: 20px 0;
+}

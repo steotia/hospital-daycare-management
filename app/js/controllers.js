@@ -5,12 +5,13 @@
 angular.module('bedManagement.controllers', []).
   controller('bedDashboardCtrl', ['$scope','$timeout','stopwatch',function($scope,$timeout,stopwatch) {
   	$scope.timer = stopwatch;
+  	//console.log();
   	$scope.beds = [];
   	for(var i=0;i<6;i++) {
   		$scope.beds.push({
   			number: i+1,
   			state: 'free',
-  			freeAt:0,
+  			freeAt:$scope.timer.data.start_time,
   			assignedAt: null,
   			assignedPatient: 'unassigned',
   			alertStatus: 'alert-success',
@@ -52,7 +53,7 @@ angular.module('bedManagement.controllers', []).
 				treatedPatient	=	bed.assignedPatient
 				bedFound=true;
 				bed.state='free';
-				bed.freeAt = 0;
+				bed.freeAt = $scope.timer.data.value;
 				bed.assignedAt = null;
 				bed.assignedPatient = 'unassigned';
 				bed.alertStatus='alert-success';
