@@ -84,8 +84,8 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="patient in patients">
-			<td class="{{patient.alertStatus}}">status</td>
+		<tr ng-repeat="patient in patients" ng-hide="patient.treated">
+			<td class="{{patient.alertStatus}}">{{patient.message}} - {{patient.probableBed}}</td>
 			<td>{{patient.patientNumber}}</td>
 			<td>{{patient.patientName}}</td>
 		</tr>

@@ -6,7 +6,7 @@ angular.module('bedManagement.controllers', []).
   controller('bedDashboardCtrl', ['$scope','$timeout','stopwatch',function($scope,$timeout,stopwatch) {
   	$scope.timer = stopwatch;
   	$scope.beds = [];
-  	for(var i=0;i<5;i++) {
+  	for(var i=0;i<6;i++) {
   		$scope.beds.push({
   			number: i+1,
   			state: 'free',
@@ -15,7 +15,7 @@ angular.module('bedManagement.controllers', []).
   			assignedPatient: 'unassigned',
   			alertStatus: 'alert-success',
   			checkedAt:null,
-  			completion:0
+  			completion:100
   		});
 	}
 	$scope.freeBeds = function(){
@@ -57,13 +57,14 @@ angular.module('bedManagement.controllers', []).
 				bed.assignedPatient = 'unassigned';
 				bed.alertStatus='alert-success';
 				bed.checkedAt = null;
-				bed.completion	=	0;
+				bed.completion	=	100;
 
 			}
 		});	
 		angular.forEach($scope.patients, function(patient) {
 			if(patient.patientNumber==treatedPatient){
 				patient.endedTreatmentAt	=	$scope.timer.data.value;
+        		patient.message = '';
 			}
 		});
 	}
@@ -94,6 +95,7 @@ angular.module('bedManagement.controllers', []).
 		angular.forEach($scope.patients, function(patient) {
 			if(patient.patientNumber==patientNum){
 				patient.startedTreatmentAt	=	$scope.timer.data.value;
+				patient.probableBed = null;
 				patient.treated	=	true;
 			}
 		});
@@ -127,26 +129,52 @@ angular.module('bedManagement.controllers', []).
         	$scope.beds.sort(function(a,b){
         		return a.completion<b.completion;
         	});
-        	var bed_count=0;
-        	var taken_beds=[];
+        	var bed_index=0;
+        	var time_diff;
+        	//var taken_beds=[];
         	angular.forEach($scope.patients, function(patient,index) {
-        		var bed = $scope.beds[bed_count];
+        		var bed = getNextUsableBed(bed_index);
         		if(!patient.treated&&bed){
-        			if(bed.state=='free'){
-        				patient.alertStatus = bed.alertStatus;
-        			} else {
-        				taken_beds.push(bed_count);
+        			//if(bed.state=='free'||bed.state=='waiting to release'){
+        			patient.alertStatus = bed.alertStatus;
+        			patient.probableBed = bed.number;
+        			bed_index+=1;
+        			time_diff = (parseInt($scope.timer.data.value) - bed.freeAt);
+        			if(time_diff>-30){
+        				patient.message = '< 30m'
+        			} else if(time_diff>-60){
+        				patient.message = '30m - 1hr'
+        			} else if(time_diff>-120) {
+        				patient.message = '1hr - 2hr'
         			}
-        			bed_count+=1;
-        		} 
-        		else
+        			//}
+        		}
+        		else {
         			patient.alertStatus = null;
+        			patient.message = '';
+        		}
         	});
             checkBeds();
         }, 1000);
     };	
 
     checkBeds();
+
+    function getNextUsableBed(index){
+    	var current_time = parseInt($scope.timer.data.value);
+    	var bed,time_diff;
+    	var bed_found=false;
+    	while(index<$scope.beds.length&&index>=0){
+    		bed = $scope.beds[index];
+    		index+=1;
+    		time_diff	=	current_time-bed.freeAt;
+    		if(bed.freeAt==0||(time_diff>-120)){
+    			bed_found=true;
+    			break;	
+    		}
+    	}
+    	return (bed_found&&bed)||null;
+    }
 
     function addPatient(name,number,type,time){
     	$scope.patients.push(
