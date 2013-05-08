@@ -8,7 +8,7 @@ angular.module('bedManagement.controllers', []).
     var time_multiplier = 60*1000;
   	//console.log();
   	$scope.beds = [];
-  	for(var i=0;i<21;i++) {
+  	for(var i=0;i<6;i++) {
   		$scope.beds.push({
   			number: i+1,
   			state: 'free',
