@@ -1,0 +1,58 @@
+
+
+	<div class="well">
+
+<button class="btn" ng-click="registerRandom(5)">Register 5 patients randomly</button>
+<button class="btn" ng-click="registerRandom(10)">Register 10 patients randomly</button>
+</div>
+
+<div class="page-header">
+  <h1>Register Patient <small></small></h1>
+</div>
+
+		<form class="form-inline" ng-submit="registerPatient()">
+		    <input type="text" placeholder="Patient Number" ng-model="patientNumber">
+		    <input type="text" placeholder="Patient Name" ng-model="patientName">
+		    <select class="input-medium" ng-model="treatmentType">
+				<option value="A">A (1 hr)</option>
+				<option value="B">B (2 hr)</option>
+				<option value="C">C (3 hr)</option>
+			</select>
+			<button class="btn" type="submit">Register</button>
+		</form>
+	<div class="page-header">
+  <h1>Bed Allocation <small><span>{{waiting()}} of {{patients.length}} patients remaining</span></small></h1>
+</div>
+	<p>
+	    <div>
+	      
+	      <table class="table">
+			<thead>
+				<tr>
+					<th>Number</th>
+					<th>Name</th>
+					<th>Treatment Type</th>
+					<th>Registered At</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="patient in patients">
+					<td class="{{patient.alertStatus}}">{{patient.patientNumber}}</td>
+					<td>{{patient.patientName}}</td>
+					<td>{{patient.treatmentType}}</td>
+					<td>{{patient.registrationTime | date:'hh:mm:ss'}}</td>
+					<td><button class="btn" ng-show="(freeBeds()!=0)&&(patient.startedTreatmentAt==null)" ng-click="assignBed(patient.patientNumber,patient.treatmentType)">Assign Bed</button></td>
+				</tr>
+			</tbody>
+	      </table>
+	      <!--
+	      <ul class="unstyled">
+	        <li ng-repeat="patient in patients">
+	          {{patient.patientNumber}} - {{patient.patientName}} - {{patient.treatmentType}} - {{patient.registrationTime}}
+	      	  <button class="btn" ng-show="(freeBeds()!=0)&&(patient.startedTreatmentAt==null)" ng-click="assignBed(patient.patientNumber,patient.treatmentType)">Assign Bed</button>
+	        </li>
+	      </ul>
+	  -->
+	    </div>
+	</p>

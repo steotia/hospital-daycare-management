@@ -6,10 +6,51 @@
   <link rel="stylesheet" href="css/app.css"/>
   <link rel="stylesheet" href="css/bootstrap.min.css"/>
 </head>
-<body>
+<body ng-controller="bedDashboardCtrl">
+  <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="./index.html">Hospital DayCare Management</a>
+            <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li class="">
+                  <a href="#/bed_dashboard.html">Bed Monitor</a>
+                </li>
+                <li class="">
+                  <a href="#/patient_registration.html">Patient Registration</a>
+                </li>
+                <li class="">
+                  <a href="#/waiting_view.html">Waiting View</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+          <div id="critical-info-bar" class="navbar navbar-inverse navbar-fixed-top " style="margin-top:40px;">
+        <div class="navbar-inner">
+          <div class="container">
+            <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li class="">
+                  <a>{{timer.data.value | date:'h:mm:ss'}} <small>now</small></a>
+                </li>
+                <li class="">
+                  <a>{{waiting()}} <small>patients waiting</small></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
   <div id="wrap">
     <div class="container">
-      <div ng-view></div>
+      <div style="margin-top: 80px;" ng-view></div>
     </div>
     <div id="push"></div>
   </div>

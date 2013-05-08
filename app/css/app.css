@@ -32,7 +32,7 @@
 .box {
 position: relative;
 margin: 15px 0;
-padding: 39px 19px 14px;
+padding: 10px 19px 14px;
 background-color: #fff;
 border: 1px solid #ddd;
 -webkit-border-radius: 4px;
@@ -155,4 +155,19 @@ height: 100%;
 }
 .container .credit {
 margin: 20px 0;
+}
+#critical-info-bar a{
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-shadow: none;
+  color:#5c3d1f;
+}
+#critical-info-bar .navbar-inner{
+  min-height:0px;
+  background-color: #f9edbe;
+  background-image:none;
+  border:#a85a38;
+}
+#critical-info-bar small{
+  color:#c89a5b;
 }

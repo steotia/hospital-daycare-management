@@ -1,0 +1,16 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>Waiting</th>
+			<th>Number</th>
+			<th>Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="patient in patients" ng-hide="patient.treated">
+			<td class="{{patient.alertStatus}}">{{patient.message}}</td>
+			<td>{{patient.patientNumber}}</td>
+			<td>{{patient.patientName}}</td>
+		</tr>
+	</tbody>
+</table>

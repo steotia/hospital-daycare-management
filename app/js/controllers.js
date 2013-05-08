@@ -5,9 +5,10 @@
 angular.module('bedManagement.controllers', []).
   controller('bedDashboardCtrl', ['$scope','$timeout','stopwatch',function($scope,$timeout,stopwatch) {
   	$scope.timer = stopwatch;
+    var time_multiplier = 60*1000;
   	//console.log();
   	$scope.beds = [];
-  	for(var i=0;i<6;i++) {
+  	for(var i=0;i<21;i++) {
   		$scope.beds.push({
   			number: i+1,
   			state: 'free',
@@ -33,10 +34,10 @@ angular.module('bedManagement.controllers', []).
 				var current_time = parseInt($scope.timer.data.value);
 				var diff_time = (parseInt(bed.freeAt)-current_time);
 				if(diff_time>0){
-					bed.freeAt += 30;
+					bed.freeAt += 30*time_multiplier;
 				}
 				else {
-					bed.freeAt = current_time+30;
+					bed.freeAt = current_time+30*time_multiplier;
 				}
 					bed.state='taken';
 					bed.alertStatus='alert-error';
@@ -69,16 +70,25 @@ angular.module('bedManagement.controllers', []).
 			}
 		});
 	}
+  $scope.checkBed = function(number){
+    var bedFound = false;
+    angular.forEach($scope.beds, function(bed) {
+      if(!bedFound && bed.number==number){
+        bed.checkedAt = $scope.timer.data.value;
+        bedFound = true;
+      }
+    });
+  }
 	$scope.assignBed = function(patientNum,treatmentType){
   		console.log('assignBed');
 		var bedFound = false;
 		var offset	=	0;
 		if(treatmentType=='A'){
-			offset	=	60;
+			offset	=	60*time_multiplier;
 		}else if(treatmentType=='B'){
-			offset	=	120;
+			offset	=	120*time_multiplier;
 		}else{
-			offset	=	180;
+			offset	=	180*time_multiplier;
 		}
 		//var patientNum = $scope.assignPatientNumber;
 		angular.forEach($scope.beds, function(bed) {
@@ -112,11 +122,11 @@ angular.module('bedManagement.controllers', []).
         			if(current_time>bed.freeAt){
         				bed.state='waiting to release';
         				bed.alertStatus='alert-warning';
-        			}else if((bed.freeAt-current_time)<30){
+        			}else if((bed.freeAt-current_time)<30*time_multiplier){
         				bed.alertStatus='alert-warning';
         			}
         		}
-        		if((bed.state!='free')&&(current_time-bed.checkedAt)>30){
+        		if((bed.state!='free')&&(current_time-bed.checkedAt)>30*time_multiplier){
         			bed.request_check=true;
         		} else {
         			bed.request_check=false;
@@ -141,11 +151,11 @@ angular.module('bedManagement.controllers', []).
         			patient.probableBed = bed.number;
         			bed_index+=1;
         			time_diff = (parseInt($scope.timer.data.value) - bed.freeAt);
-        			if(time_diff>-30){
+        			if(time_diff>-30*time_multiplier){
         				patient.message = '< 30m'
-        			} else if(time_diff>-60){
+        			} else if(time_diff>-60*time_multiplier){
         				patient.message = '30m - 1hr'
-        			} else if(time_diff>-120) {
+        			} else if(time_diff>-120*time_multiplier) {
         				patient.message = '1hr - 2hr'
         			}
         			//}
@@ -169,7 +179,7 @@ angular.module('bedManagement.controllers', []).
     		bed = $scope.beds[index];
     		index+=1;
     		time_diff	=	current_time-bed.freeAt;
-    		if(bed.freeAt==0||(time_diff>-120)){
+    		if(bed.freeAt==0||(time_diff>-120*time_multiplier)){
     			bed_found=true;
     			break;	
     		}
