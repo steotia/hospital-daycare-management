@@ -1,0 +1,20 @@
+{
+  "name": "hospital-daycare-mgmt",
+  "version": "0.0.1",
+  "description": "an app to manage beds and patient queue in a hospital daycare",
+  "main": "scripts/web-server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/steotia/hospital-daycare-management.git"
+  },
+  "author": "steotia@thoughtworks.com",
+  "license": "BSD",
+  "gitHead": "351848977ab310d28f763e3357ff364e1776aab7",
+  "readmeFilename": "README.md"
+}
