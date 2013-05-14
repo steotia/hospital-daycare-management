@@ -213,6 +213,7 @@ angular.module('bedManagement.services', []).
                 this.freeAt = stopwatch.data.value;
             }
             this.freeAt+=SNOOZE_LENGTH;
+            this.checkBed();
         }
         Bed.prototype.checkBed = function(time){
             this.checkedAt = stopwatch.data.value; 

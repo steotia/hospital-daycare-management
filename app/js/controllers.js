@@ -34,11 +34,16 @@ angular.module('bedManagement.controllers', []).
             }
         ]).
   controller('bedMonitorCtrl', ['$scope','$timeout','stopwatch','patientStore','bedManager',function($scope,$timeout,stopwatch,patientStore,bedManager) {
+    $scope.checkBed = function(patientNumber){
+        var bed = bedManager.getBed(patientNumber);
+        bed.checkBed();
+    }
   }]).
   controller('waitingRoomCtrl', ['$scope','$timeout','stopwatch','patientStore','estimator',function($scope,$timeout,stopwatch,patientStore,estimator) {
     
   }]).
   controller('patientRegistrationCtrl', ['$scope','$timeout','stopwatch','patientStore','bedManager','treatmentLibrary',function($scope,$timeout,stopwatch,patientStore,bedManager,treatmentLibrary) {
+
     $scope.checkMedicine = function(patientNumber){
         patientStore.checkMedicine(patientNumber);
     }

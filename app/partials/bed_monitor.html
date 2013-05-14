@@ -10,8 +10,8 @@
 			<li ng-repeat="bed in bedManager.getBeds()">
 				<div class="box span2 b{{bed.number}} {{bed.alertStatus}}">
 					<div>
-						<button style="margin-bottom: 10px;" class="btn btn-mini btn-warning pull-right" ng-show="bed.request_check" ng-click="checkBed(bed.number)">Check</button>
-						<button style="margin-bottom: 10px;" class="btn btn-mini pull-right disabled" ng-hide="bed.request_check">Checked</button>
+						<button style="margin-bottom: 10px;" class="btn btn-mini btn-warning pull-right" ng-show="bed.checkRequired" ng-click="checkBed(bed.assignedPatientNumber)">Check</button>
+						<button style="margin-bottom: 10px;" class="btn btn-mini pull-right disabled" ng-hide="bed.checkRequired">Checked</button>
 					</div>
 					<div class="clearfix"/>
 					<div ng-hide="bed.warn" class="progress">
