@@ -27,6 +27,9 @@ angular.module('bedManagement.controllers', []).
                 $scope.earliestPatientWaiting = function(){
                     return (stopwatch.data.value + estimator.earliestPatientWaiting())
                 }
+                $scope.callToReception = function(patientNumber){
+                    patientStore.callToReception(patientNumber);
+                }
                 
             }
         ]).
@@ -36,22 +39,36 @@ angular.module('bedManagement.controllers', []).
     
   }]).
   controller('patientRegistrationCtrl', ['$scope','$timeout','stopwatch','patientStore','bedManager','treatmentLibrary',function($scope,$timeout,stopwatch,patientStore,bedManager,treatmentLibrary) {
-
+    $scope.checkMedicine = function(patientNumber){
+        patientStore.checkMedicine(patientNumber);
+    }
+    $scope.mixMedicine = function(patientNumber){
+        patientStore.mixMedicine(patientNumber);
+    }
+    $scope.fetchRecord = function(patientNumber){
+        patientStore.fetchRecord(patientNumber);
+    }
     $scope.registerPatient = function() {
+        /*
         patientStore.addPatient(
             $scope.patientName,
             $scope.patientNumber,
             $scope.treatmentType,
             stopwatch.data.value
-            );
+            );*/
+        registerRandom(1,$scope.patientNumber);
         $scope.patientName = '';
         $scope.patientNumber = '';
     };
-    $scope.registerRandom = function(count){
+    var registerRandom = function(count,patientNumber=null){
         var name,number,type,time;
         for(var i=0;i<count;i++) {
             name = 'Patient'+$scope.patientStore.getPatients().length;
-            number = Math.floor(Math.random() * 1000000) + 2;
+            if(patientNumber){
+                number = patientNumber;
+            } else {
+                number = Math.floor(Math.random() * 1000000) + 2;
+            }
             type = (Math.floor(Math.random() * 10)%3) + 1;
             if(type==1)
                 type='A';
@@ -63,6 +80,7 @@ angular.module('bedManagement.controllers', []).
             patientStore.addPatient(name,number,type,time);
         }
     }
+    $scope.registerRandom = registerRandom;
     $scope.assignBed = function(patientNum,treatmentType){
         var time = stopwatch.data.value;
         var duration = $scope.treatmentLibrary.treatmentTime(treatmentType);

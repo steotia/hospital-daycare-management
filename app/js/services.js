@@ -149,10 +149,29 @@ angular.module('bedManagement.services', []).
             patients[index].endedTreatmentAt = time;
         }
     }  
-    var callToReception = function(){
+    var callToReception = function(patientNumber){
         var index = patientIndex(patientNumber);
         if(index!=null){
             patients[index].beacon = true;
+        }
+    }
+    //TODO add these methods into the prototype
+    var checkMedicine = function(patientNumber){
+        var index = patientIndex(patientNumber);
+        if(index!=null){
+            patients[index].checkMedicine = true;
+        }
+    }
+    var mixMedicine = function(patientNumber){
+        var index = patientIndex(patientNumber);
+        if(index!=null){
+            patients[index].mixMedicine = true;
+        }
+    }
+    var fetchRecord = function(patientNumber){
+        var index = patientIndex(patientNumber);
+        if(index!=null){
+            patients[index].fetchRecord = true;
         }
     }
     return {
@@ -163,7 +182,10 @@ angular.module('bedManagement.services', []).
         treated: treated,
         startTreatment: startTreatment,
         endTreatment: endTreatment,
-        callToReception: callToReception
+        callToReception: callToReception,
+        checkMedicine: checkMedicine,
+        mixMedicine: mixMedicine,
+        fetchRecord: fetchRecord
     }
   }).factory('bedManager',function(SW_DELAI,BED_COUNT,SNOOZE_LENGTH,$timeout,stopwatch,patientStore){
     var beds = [];
@@ -187,6 +209,9 @@ angular.module('bedManagement.services', []).
             this.warn = false;
         }
         Bed.prototype.delayRelease = function(){
+            if(this.completion==100){
+                this.freeAt = stopwatch.data.value;
+            }
             this.freeAt+=SNOOZE_LENGTH;
         }
         Bed.prototype.checkBed = function(time){
@@ -325,7 +350,10 @@ angular.module('bedManagement.services', []).
             for(var i=0;i<this.patients.length;i++){
                 names.push(this.patients[i].patientName);
             }
-            return names.join(' ');
+            return names;
+        }
+        Bucket.prototype.getPatients = function(){
+            return this.patients;
         }
     }
     var buckets = [

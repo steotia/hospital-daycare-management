@@ -6,13 +6,15 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="patient in patientStore.getPatients()" ng-show="patient.beacon">
-			<td>Reception</td>
-			<td>{{patient.patientName}}</td>
-		</tr>
 		<tr ng-repeat="bucket in estimator.getBuckets()">
 			<td>{{bucket.msg}}</td>
-			<td>{{bucket.getPatientNames()}}</td>
+			<td>
+				<ul class="unstyled">
+					<li ng-repeat="patient in bucket.getPatients()">
+						{{patient.patientName}} <span ng-show="patient.beacon" class="label label-important">Come to Reception</span>
+					</li>
+				</ul>
+			</td>
 		</tr> 
 		<!--
 		<tr ng-repeat="patient in patientStore.getPatients()" ng-show="patient.startedTreatmentAt==null">
