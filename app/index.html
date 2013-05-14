@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="css/app.css"/>
   <link rel="stylesheet" href="css/bootstrap.min.css"/>
 </head>
-<body ng-controller="bedDashboardCtrl">
+<body ng-controller="AppCtrl">
   <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
           <div class="container">
@@ -19,7 +19,7 @@
             <div class="nav-collapse collapse">
               <ul class="nav">
                 <li class="">
-                  <a href="#/bed_dashboard.html">Bed Monitor</a>
+                  <a href="#/bed_monitor.html">Bed Monitor</a>
                 </li>
                 <li class="">
                   <a href="#/patient_registration.html">Patient Registration</a>
@@ -38,10 +38,13 @@
             <div class="nav-collapse collapse">
               <ul class="nav">
                 <li class="">
-                  <a>{{timer.data.value | date:'h:mm:ss'}} <small>now</small></a>
+                  <a>{{timer.data.value | date:'h:mm'}} <small>now</small></a>
                 </li>
                 <li class="">
-                  <a>{{waiting()}} <small>patients waiting</small></a>
+                  <a>{{patientStore.waiting()}} <small>patients waiting</small></a>
+                </li>
+                <li>
+                  <a>{{earliestPatientWaiting() | date:'h:mm' }} <small>next bed availability</small></a>
                 </li>
               </ul>
             </div>
@@ -67,9 +70,10 @@
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
   -->
+  <script src="lib/3rd-party/state-machine.min.js"></script>
   <script src="js/jquery.js"></script>
   <script src="js/moment.js"></script>
-  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.js"></script>
   <script src="lib/angular/angular.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>

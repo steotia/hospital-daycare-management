@@ -3,241 +3,72 @@
 /* Controllers */
 
 angular.module('bedManagement.controllers', []).
-  controller('bedDashboardCtrl', ['$scope','$timeout','stopwatch',function($scope,$timeout,stopwatch) {
-  	$scope.timer = stopwatch;
-    var time_multiplier = 60*1000;
-  	//console.log();
-  	$scope.beds = [];
-  	for(var i=0;i<6;i++) {
-  		$scope.beds.push({
-  			number: i+1,
-  			state: 'free',
-  			freeAt:$scope.timer.data.start_time,
-  			assignedAt: null,
-  			assignedPatient: 'unassigned',
-  			alertStatus: 'alert-success',
-  			checkedAt:null,
-  			completion:100
-  		});
-	}
-	$scope.freeBeds = function(){
-		var count = 0;
-    	angular.forEach($scope.beds, function(bed) {
-      		count += bed.state=='free' ? 1 : 0;
-    	});
-    	return count;
-	};
-	$scope.delayRelease = function(number){
-		var bedFound = false;
-		angular.forEach($scope.beds, function(bed) {
-			if(!bedFound && bed.number==number){
-				var current_time = parseInt($scope.timer.data.value);
-				var diff_time = (parseInt(bed.freeAt)-current_time);
-				if(diff_time>0){
-					bed.freeAt += 30*time_multiplier;
-				}
-				else {
-					bed.freeAt = current_time+30*time_multiplier;
-				}
-					bed.state='taken';
-					bed.alertStatus='alert-error';
-					bed.request_check=false;
-					bed.checkedAt = current_time;
-			}
-		});	
-	}
-	$scope.releaseBed = function(number){
-		var bedFound = false;
-		var treatedPatient = null;
-		angular.forEach($scope.beds, function(bed) {
-			if(!bedFound && bed.number==number){
-				treatedPatient	=	bed.assignedPatient
-				bedFound=true;
-				bed.state='free';
-				bed.freeAt = $scope.timer.data.value;
-				bed.assignedAt = null;
-				bed.assignedPatient = 'unassigned';
-				bed.alertStatus='alert-success';
-				bed.checkedAt = null;
-				bed.completion	=	100;
+    controller(
+        'AppCtrl', 
+        [
+            '$scope',
+            '$timeout',
+            'stopwatch',
+            'patientStore',
+            'bedManager',
+            'treatmentLibrary',
+            'estimator',
+            function($scope,$timeout,stopwatch,patientStore,bedManager,treatmentLibrary,estimator) {
+                $scope.timer = stopwatch;
+                $scope.patientStore = patientStore;
+                $scope.bedManager = bedManager;
+                $scope.patientStore.reset();
+                $scope.bedManager.reset();
+                $scope.estimator = estimator;
+                $scope.treatmentLibrary = treatmentLibrary;
+                $scope.convert_to_minutes = function(seconds){
+                    return Math.round(seconds/(60*1000));
+                }
+                $scope.earliestPatientWaiting = function(){
+                    return (stopwatch.data.value + estimator.earliestPatientWaiting())
+                }
+                
+            }
+        ]).
+  controller('bedMonitorCtrl', ['$scope','$timeout','stopwatch','patientStore','bedManager',function($scope,$timeout,stopwatch,patientStore,bedManager) {
+  }]).
+  controller('waitingRoomCtrl', ['$scope','$timeout','stopwatch','patientStore','estimator',function($scope,$timeout,stopwatch,patientStore,estimator) {
+    
+  }]).
+  controller('patientRegistrationCtrl', ['$scope','$timeout','stopwatch','patientStore','bedManager','treatmentLibrary',function($scope,$timeout,stopwatch,patientStore,bedManager,treatmentLibrary) {
 
-			}
-		});	
-		angular.forEach($scope.patients, function(patient) {
-			if(patient.patientNumber==treatedPatient){
-				patient.endedTreatmentAt	=	$scope.timer.data.value;
-        		patient.message = '';
-			}
-		});
-	}
-  $scope.checkBed = function(number){
-    var bedFound = false;
-    angular.forEach($scope.beds, function(bed) {
-      if(!bedFound && bed.number==number){
-        bed.checkedAt = $scope.timer.data.value;
-        bedFound = true;
-      }
-    });
-  }
-	$scope.assignBed = function(patientNum,treatmentType){
-  		console.log('assignBed');
-		var bedFound = false;
-		var offset	=	0;
-		if(treatmentType=='A'){
-			offset	=	60*time_multiplier;
-		}else if(treatmentType=='B'){
-			offset	=	120*time_multiplier;
-		}else{
-			offset	=	180*time_multiplier;
-		}
-		//var patientNum = $scope.assignPatientNumber;
-		angular.forEach($scope.beds, function(bed) {
-			if(!bedFound && bed.state=='free'){
-				bedFound=true;
-				bed.assignedPatient = patientNum;
-				bed.assignedAt = $scope.timer.data.value;
-				bed.freeAt = bed.assignedAt + offset;
-				console.log('Bed will be freed at:'+bed.freeAt);
-				bed.state='taken';
-				bed.alertStatus='alert-error';
-				bed.checkedAt = bed.assignedAt;
-			}
-		});
-		angular.forEach($scope.patients, function(patient) {
-			if(patient.patientNumber==patientNum){
-				patient.startedTreatmentAt	=	$scope.timer.data.value;
-				patient.probableBed = null;
-				patient.treated	=	true;
-			}
-		});
-	}
-
-	var checkEv;
-
-	function checkBeds() {
-        checkEv = $timeout(function() {
-        	angular.forEach($scope.beds, function(bed) {
-        		var current_time = parseInt($scope.timer.data.value);
-        		if(bed.state=='taken'){
-        			if(current_time>bed.freeAt){
-        				bed.state='waiting to release';
-        				bed.alertStatus='alert-warning';
-        			}else if((bed.freeAt-current_time)<30*time_multiplier){
-        				bed.alertStatus='alert-warning';
-        			}
-        		}
-        		if((bed.state!='free')&&(current_time-bed.checkedAt)>30*time_multiplier){
-        			bed.request_check=true;
-        		} else {
-        			bed.request_check=false;
-        		}
-        		if(bed.state!='free'){
-        			bed.completion=(current_time-bed.assignedAt)*100/(bed.freeAt-bed.assignedAt);
-        			if(bed.completion>100)
-        				bed.completion=100;
-        		}
-        	});
-        	$scope.beds.sort(function(a,b){
-        		return a.completion<b.completion;
-        	});
-        	var bed_index=0;
-        	var time_diff;
-        	//var taken_beds=[];
-        	angular.forEach($scope.patients, function(patient,index) {
-        		var bed = getNextUsableBed(bed_index);
-        		if(!patient.treated&&bed){
-        			//if(bed.state=='free'||bed.state=='waiting to release'){
-        			patient.alertStatus = bed.alertStatus;
-        			patient.probableBed = bed.number;
-        			bed_index+=1;
-        			time_diff = (parseInt($scope.timer.data.value) - bed.freeAt);
-        			if(time_diff>-30*time_multiplier){
-        				patient.message = '< 30m'
-        			} else if(time_diff>-60*time_multiplier){
-        				patient.message = '30m - 1hr'
-        			} else if(time_diff>-120*time_multiplier) {
-        				patient.message = '1hr - 2hr'
-        			}
-        			//}
-        		}
-        		else {
-        			patient.alertStatus = null;
-        			patient.message = '';
-        		}
-        	});
-            checkBeds();
-        }, 1000);
-    };	
-
-    checkBeds();
-
-    function getNextUsableBed(index){
-    	var current_time = parseInt($scope.timer.data.value);
-    	var bed,time_diff;
-    	var bed_found=false;
-    	while(index<$scope.beds.length&&index>=0){
-    		bed = $scope.beds[index];
-    		index+=1;
-    		time_diff	=	current_time-bed.freeAt;
-    		if(bed.freeAt==0||(time_diff>-120*time_multiplier)){
-    			bed_found=true;
-    			break;	
-    		}
-    	}
-    	return (bed_found&&bed)||null;
+    $scope.registerPatient = function() {
+        patientStore.addPatient(
+            $scope.patientName,
+            $scope.patientNumber,
+            $scope.treatmentType,
+            stopwatch.data.value
+            );
+        $scope.patientName = '';
+        $scope.patientNumber = '';
+    };
+    $scope.registerRandom = function(count){
+        var name,number,type,time;
+        for(var i=0;i<count;i++) {
+            name = 'Patient'+$scope.patientStore.getPatients().length;
+            number = Math.floor(Math.random() * 1000000) + 2;
+            type = (Math.floor(Math.random() * 10)%3) + 1;
+            if(type==1)
+                type='A';
+            else if(type==2)
+                type='B';
+            else
+                type='C';
+            time=stopwatch.data.value;
+            patientStore.addPatient(name,number,type,time);
+        }
     }
-
-    function addPatient(name,number,type,time){
-    	$scope.patients.push(
-	    	{
-	    		patientName:name,
-	    		patientNumber:number,
-	    		treatmentType:type,
-	    		registrationTime:time,
-	    		startedTreatmentAt:null,
-	    		treated:false
-	    	});
+    $scope.assignBed = function(patientNum,treatmentType){
+        var time = stopwatch.data.value;
+        var duration = $scope.treatmentLibrary.treatmentTime(treatmentType);
+        bedManager.assignBed(patientNum,duration,time);
+        patientStore.startTreatment(patientNum,time);
     }
-
-  	$scope.patients	=	[];
-
-  	$scope.registerPatient = function() {
-  		console.log('registerPatient');
-	    addPatient(
-	    	$scope.patientName,
-	    	$scope.patientNumber,
-	    	$scope.treatmentType,
-	    	$scope.timer.data.value
-	    	);
-	    $scope.patientName = '';
-	    $scope.patientNumber = '';
-  	};
-  	$scope.waiting = function() {
-	    var count = 0;
-	    angular.forEach($scope.patients, function(patient) {
-	      count += patient.startedTreatmentAt==null ? 1 : 0;
-	    });
-	    return count;
-  	};
-  	$scope.registerRandom = function(count){
-  		var name,number,type,time;
-  		for(var i=0;i<count;i++) {
-  			name = 'Patient'+i+1;
-  			number = Math.floor(Math.random() * 1000000) + 2;
-  			type = (Math.floor(Math.random() * 10)%3) + 1;
-  			if(type==1)
-  				type='A';
-  			else if(type==2)
-  				type='B';
-  			else
-  				type='C';
-  			time=$scope.timer.data.value;
-  			//1000+Math.floor(Math.random() * 1000);
-  			addPatient(name,number,type,time);
-  		}
-  	}
-
-  }])
-  .controller('MyCtrl2', [function() {
+  }]).controller('MyCtrl2', [function() {
 
   }]);

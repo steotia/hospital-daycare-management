@@ -1,16 +1,25 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th>Waiting</th>
-			<th>Number</th>
-			<th>Name</th>
+			<th>Aprox. waiting times</th>
+			<th>Patients waiting</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="patient in patients" ng-hide="patient.treated">
-			<td class="{{patient.alertStatus}}">{{patient.message}}</td>
+		<tr ng-repeat="patient in patientStore.getPatients()" ng-show="patient.beacon">
+			<td>Reception</td>
+			<td>{{patient.patientName}}</td>
+		</tr>
+		<tr ng-repeat="bucket in estimator.getBuckets()">
+			<td>{{bucket.msg}}</td>
+			<td>{{bucket.getPatientNames()}}</td>
+		</tr> 
+		<!--
+		<tr ng-repeat="patient in patientStore.getPatients()" ng-show="patient.startedTreatmentAt==null">
+			<td class="{{patient.alertStatus}}">{{patient.waitingMsg}}</td>
 			<td>{{patient.patientNumber}}</td>
 			<td>{{patient.patientName}}</td>
 		</tr>
+		-->
 	</tbody>
 </table>

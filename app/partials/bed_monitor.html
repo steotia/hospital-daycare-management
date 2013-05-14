@@ -1,0 +1,32 @@
+<div class="well">
+	<button class="btn" ng-click='timer.start(1)'>></button>
+	<button class="btn" ng-click='timer.start(60)'>>></button>
+	<button class="btn" ng-click='timer.stop()'>||</button>
+</div>
+<div class="page-header">
+  <h1>Bed Management Dashboard <small>monitor bed allocation</small></h1>
+</div>
+<ul class="unstyled">
+			<li ng-repeat="bed in bedManager.getBeds()">
+				<div class="box span2 b{{bed.number}} {{bed.alertStatus}}">
+					<div>
+						<button style="margin-bottom: 10px;" class="btn btn-mini btn-warning pull-right" ng-show="bed.request_check" ng-click="checkBed(bed.number)">Check</button>
+						<button style="margin-bottom: 10px;" class="btn btn-mini pull-right disabled" ng-hide="bed.request_check">Checked</button>
+					</div>
+					<div class="clearfix"/>
+					<div ng-hide="bed.warn" class="progress">
+		  				<div class="bar" style="width: {{bed.completion}}%"></div>
+					</div>
+					<div ng-show="bed.warn" class="progress">
+		  				<div class="bar bar-danger" style="width: {{bed.completion}}%"></div>
+					</div>
+					<div>{{bed.assignedPatientNumber}}</div>
+						<h2 ng-hide="bed.warn">{{convert_to_minutes(bed.timeLeft())}} <small> mins left</small></h2>
+						<h2 ng-show="bed.warn" class="text-error">{{convert_to_minutes(bed.timeLeft())}}<small> mins left</small></h2>
+
+					<button class="btn btn-mini btn-danger" ng-show="(bed.current!='free')" ng-click="bed.delayRelease()">Delay</button>
+					<button class="btn btn-mini btn-danger" ng-show="(bed.current!='free')" ng-click="bed.release()">Release</button>
+					<button class="btn btn-mini disabled" ng-show="bed.current=='free'">Released</button>
+				</div>
+			</li>
+		</ul>
