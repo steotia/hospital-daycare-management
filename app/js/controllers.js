@@ -77,7 +77,7 @@ angular.module('bedManagement.controllers', []).
         $scope.patientName = '';
         $scope.patientNumber = '';
     };
-    var registerRandom = function(count,patientNumber=null){
+    var registerRandom = function(count,patientNumber){
         var name,number,type,time;
         for(var i=0;i<count;i++) {
             name = 'Patient'+$scope.patientStore.getPatients().length;
