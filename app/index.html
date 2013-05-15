@@ -43,6 +43,12 @@
                 <li class="">
                   <a>{{patientStore.waiting()}} <small>patients waiting</small></a>
                 </li>
+                <li class="">
+                  <a>{{bedManager.freeBeds()}} <small>beds free</small></a>
+                </li>
+                <li>
+                  <a>{{freeIn30mins()}} <small>beds nearing</small></a>
+                </li>
                 <li>
                   <a>{{earliestPatientWaiting() | date:'h:mm' }} <small>next bed availability</small></a>
                 </li>

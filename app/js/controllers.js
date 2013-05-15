@@ -30,6 +30,18 @@ angular.module('bedManagement.controllers', []).
                 $scope.callToReception = function(patientNumber){
                     patientStore.callToReception(patientNumber);
                 }
+                $scope.freeIn30mins = function(){
+                    var count=0;
+                    var bed;
+                    var beds = bedManager.getBeds();
+                    for(var i=0;i<beds.length;i++){
+                        bed = beds[i];
+                        if(bed.warn==true){
+                            count++;
+                        }
+                    }
+                    return count;
+                }
                 
             }
         ]).

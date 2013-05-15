@@ -171,3 +171,8 @@ margin: 20px 0;
 #critical-info-bar small{
   color:#c89a5b;
 }
+
+th {
+  background-color: gray;
+    color: white;
+}
