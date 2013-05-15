@@ -11,9 +11,9 @@ angular.module('bedManagement.services', []).
   constant('START_TIME', (new Date().getTime())).
   constant('BED_COUNT',6).
   constant('SNOOZE_LENGTH',30*60*1000).
-  constant('A_TREATMENT',60*60*1000).
-  constant('B_TREATMENT',120*60*1000).
-  constant('C_TREATMENT',180*60*1000).
+  constant('A_TREATMENT',2*60*60*1000).
+  constant('B_TREATMENT',4*60*60*1000).
+  constant('C_TREATMENT',6*60*60*1000).
   factory('stopwatch', function (SW_DELAI,START_TIME,$timeout,$filter) {
     var data = { 
             value: START_TIME,
@@ -109,11 +109,14 @@ angular.module('bedManagement.services', []).
         });
         return count;
     };
+    /*
     var registerRandom = function(count){
         var name,number,type,time;
+        var fName,sName;
         for(var i=0;i<count;i++) {
-            name = 'Patient'+patients.length;
             number = Math.floor(Math.random() * 1000000) + 2;
+            fName = Math.floor(Math.random() * 1000000) % 15
+            name = 'Patient'+patients.length;
             type = (Math.floor(Math.random() * 10)%3) + 1;
             if(type==1)
                 type='A';
@@ -126,6 +129,7 @@ angular.module('bedManagement.services', []).
             addPatient(name,number,type,time);
         }
     };
+    */
     function patientIndex(patientNumber){
         var index=null;
         for(var i=0;i<patients.length;i++){

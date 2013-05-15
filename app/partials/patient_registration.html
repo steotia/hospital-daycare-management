@@ -14,7 +14,7 @@
 			<fieldset>
     			<div class="input-append">
 		    		<input type="text" placeholder="Patient Number" ng-model="patientNumber">
-		    		<button class="btn" type="submit">Fetch</button>
+		    		<button class="btn btn-success" type="submit">Fetch</button>
 		    	</div>
 		    <!--
 		    <input type="text" placeholder="Patient Name" ng-model="patientName">
@@ -66,10 +66,11 @@
 						</label>
 					</td>
 					<td>
-						<button class="btn" ng-show="bedManager.freeBeds()!=0" ng-click="assignBed(patient.patientNumber,patient.treatmentType)">Assign Bed</button>
+						<button class="btn btn-success" ng-show="bedManager.freeBeds()!=0" ng-click="assignBed(patient.patientNumber,patient.treatmentType)">Assign Bed</button>
 						<button class="btn disabled" ng-hide="bedManager.freeBeds()!=0">No beds free</button>
-						<button class="btn" ng-show="(patient.beacon!=true)" ng-click="callToReception(patient.patientNumber)">Call to Reception</button>
-						<button class="btn disabled" ng-show="(patient.beacon==true)" ng-click="callToReception(patient.patientNumber)">Waiting</button>
+
+						<button class="btn btn-danger" ng-show="(patient.beacon!=true)" ng-click="callToReception(patient.patientNumber)"><i class="icon-bell icon-white"></i></button>
+						<button class="btn disabled" ng-show="(patient.beacon==true)" ng-click="callToReception(patient.patientNumber)"><i class="icon-bell icon-white"></i></button>
 					</td>
 				</tr>
 			</tbody>

@@ -14,6 +14,9 @@ angular.module('bedManagement.controllers', []).
             'treatmentLibrary',
             'estimator',
             function($scope,$timeout,stopwatch,patientStore,bedManager,treatmentLibrary,estimator) {
+                
+    
+
                 $scope.timer = stopwatch;
                 $scope.patientStore = patientStore;
                 $scope.bedManager = bedManager;
@@ -55,7 +58,41 @@ angular.module('bedManagement.controllers', []).
     
   }]).
   controller('patientRegistrationCtrl', ['$scope','$timeout','stopwatch','patientStore','bedManager','treatmentLibrary',function($scope,$timeout,stopwatch,patientStore,bedManager,treatmentLibrary) {
+var firstNames = [
+        "Raman",
+        "Mohit",
+        "Damini",
+        "Meenakshi",
+        "Sangeeta",
+        "Geeta",
+        "Sona",
+        "Sunanda",
+        "Moti",
+        "Abhishek",
+        "Gaurav",
+        "Rahul",
+        "Jeet",
+        "Dev",
+        "Devender"
+    ];
 
+    var secondNames = [
+        "Sharma",
+        "Khanna",
+        "Singh",
+        "",
+        "Khandelwal",
+        "Jhunjhunwala",
+        "Gupta",
+        "Ghosh",
+        "Aiyyar",
+        "Joshi",
+        "Patel",
+        "Mitra",
+        "Mishra",
+        "De",
+        "Srivastava"
+    ];
     $scope.checkMedicine = function(patientNumber){
         patientStore.checkMedicine(patientNumber);
     }
@@ -79,8 +116,12 @@ angular.module('bedManagement.controllers', []).
     };
     var registerRandom = function(count,patientNumber){
         var name,number,type,time;
+        var fName,sName;
         for(var i=0;i<count;i++) {
-            name = 'Patient'+$scope.patientStore.getPatients().length;
+            fName = firstNames[(Math.floor(Math.random() * 1000000) % 15)];
+            sName = secondNames[(Math.floor(Math.random() * 1000000) % 15)];
+            name = fName + " " + sName;
+            //name = 'Patient'+$scope.patientStore.getPatients().length;
             if(patientNumber){
                 number = patientNumber;
             } else {
